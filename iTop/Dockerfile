@@ -24,7 +24,7 @@ RUN curl -L -o itop.zip https://sourceforge.net/projects/itop/files/itop/3.2.1-1
     && rm -rf itop.zip itop
 
 # Crear carpetas necesarias para iTop y asignar permisos
-RUN mkdir -p /var/www/html/data/cache-production \
+RUN mkdir -p /var/www/html/data/cache-production/InterfaceDiscovery \
     /var/www/html/data/log \
     /var/www/html/data/tmp \
     /var/www/html/conf \
