@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && mkdir -p /var/lib/php/sessions && chmod 733 /var/lib/php/sessions \
     && echo 'session.save_path="/var/lib/php/sessions"' > /usr/local/etc/php/conf.d/session.ini
 
-# Cambiar todos los puertos 80 a 8080 en configuración Apache
+# Cambiar puertos Apache a 8080 y configurar ServerName
 RUN find /etc/apache2 -type f -exec sed -i 's/:80/:8080/g' {} + \
     && sed -i '/^Listen /c\Listen 8080' /etc/apache2/ports.conf \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf
@@ -16,16 +16,21 @@ RUN find /etc/apache2 -type f -exec sed -i 's/:80/:8080/g' {} + \
 # Expone puerto 8080
 EXPOSE 8080
 
-# Descargar y copiar iTop
+# Descargar, descomprimir y copiar iTop
 WORKDIR /var/www/html
-RUN curl -L -o itop.zip https://github.com/Combodo/iTop/releases/download/3.2.1-1/iTop-3.2.1-1-16749.zip \
-    && unzip itop.zip -d itop \
+RUN curl -L -o itop.zip https://sourceforge.net/projects/itop/files/itop/3.2.1-1/iTop-3.2.1-1-16749.zip/download \
+    && unzip -q -o itop.zip -d itop \
     && cp -r itop/web/* . \
     && rm -rf itop.zip itop
 
-# Otorgar permisos a www-data para configuración
-RUN chown -R www-data:www-data /var/www/html/conf
+# Crear carpetas necesarias para iTop y asignar permisos
+RUN mkdir -p /var/www/html/data/cache-production \
+    /var/www/html/data/log \
+    /var/www/html/data/tmp \
+    /var/www/html/conf \
+    /var/www/html/env-production \
+    /var/www/html/log \
+    && chown -R www-data:www-data /var/www/html
 
-# Ejecutar Apache en foreground
+# Comando para iniciar Apache en primer plano
 CMD ["apache2-foreground"]
-
