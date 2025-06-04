@@ -23,15 +23,14 @@ RUN curl -L -o itop.zip https://sourceforge.net/projects/itop/files/itop/3.2.1-1
     && cp -r itop/web/* . \
     && rm -rf itop.zip itop
 
-# Crear carpetas necesarias para iTop y asignar permisos
-RUN mkdir -p /var/www/html/data/cache-production/InterfaceDiscovery \
-    /var/www/html/data/cache-production/twig/templates \
-    /var/www/html/data/log \
-    /var/www/html/data/tmp \
-    /var/www/html/conf \
-    /var/www/html/env-production \
-    /var/www/html/log \
-    && chown -R www-data:www-data /var/www/html
+# Crear directorios para caché, logs y otros archivos fuera de /var/www/html
+RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf /var/www/html/env-production \
+    && chown -R www-data:www-data /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html
+
+# Modificar la configuración de iTop para usar directorios en /tmp
+RUN echo "\$MySettings['cache_dir'] = '/tmp/itop-cache';" >> /var/www/html/conf/production/config-itop.php \
+    && echo "\$MySettings['log_dir'] = '/tmp/itop-log';" >> /var/www/html/conf/production/config-itop.php \
+    && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php
 
 # Comando para iniciar Apache en primer plano
 CMD ["apache2-foreground"]
