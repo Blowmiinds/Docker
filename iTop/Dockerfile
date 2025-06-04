@@ -28,9 +28,7 @@ RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf/pro
     && chown -R www-data:www-data /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html
 
 # Modificar la configuración de iTop para usar directorios en /tmp
-RUN echo "\$MySettings['cache_dir'] = '/tmp/itop-cache';" >> /var/www/html/conf/production/config-itop.php \
-    && echo "\$MySettings['log_dir'] = '/tmp/itop-log';" >> /var/www/html/conf/production/config-itop.php \
-    && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php
+RUN printf "\$MySettings['cache_dir'] = '/tmp/itop-cache';\n\$MySettings['log_dir'] = '/tmp/itop-log';\n\$MySettings['data_dir'] = '/tmp/itop-data';\n" >> /var/www/html/conf/production/config-itop.php
 
 # Comando para iniciar Apache en primer plano
 CMD ["apache2-foreground"]
