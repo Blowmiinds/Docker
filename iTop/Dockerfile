@@ -27,10 +27,11 @@ RUN curl -L -o itop.zip https://sourceforge.net/projects/itop/files/itop/3.2.1-1
 RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf/production /var/www/html/env-production \
     && chown -R www-data:www-data /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html
 
-# Modificar la configuración de iTop para usar directorios en /tmp
+# Asegurarse de que el archivo de configuración se modifique correctamente
 RUN echo "\$MySettings['cache_dir'] = '/tmp/itop-cache';" >> /var/www/html/conf/production/config-itop.php \
     && echo "\$MySettings['log_dir'] = '/tmp/itop-log';" >> /var/www/html/conf/production/config-itop.php \
-    && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php
+    && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php \
+    && chmod 777 /var/www/html/conf/production/config-itop.php
 
 # Comando para iniciar Apache en primer plano
 CMD ["apache2-foreground"]
