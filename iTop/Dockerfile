@@ -27,11 +27,13 @@ RUN curl -L -o itop.zip https://sourceforge.net/projects/itop/files/itop/3.2.1-1
 RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf/production /var/www/html/env-production \
     && chown -R www-data:www-data /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html
 
-# Asegurarse de que el archivo de configuración se modifique correctamente
-RUN echo "\$MySettings['cache_dir'] = '/tmp/itop-cache';" >> /var/www/html/conf/production/config-itop.php \
+# Asegurarse de que el archivo de configuración se modifique correctamente (comillas simples PHP)
+RUN echo "\$MySettings['cache_dir'] = '/tmp/itop-cache';" > /var/www/html/conf/production/config-itop.php \
     && echo "\$MySettings['log_dir'] = '/tmp/itop-log';" >> /var/www/html/conf/production/config-itop.php \
-    && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php \
-    && chmod 644 /var/www/html/conf/production/config-itop.php  # Cambiar permisos a solo lectura
+    && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php
+
+# Cambiar permisos de solo lectura para el archivo config-itop.php después de la configuración
+RUN chmod 644 /var/www/html/conf/production/config-itop.php
 
 # Comando para iniciar Apache en primer plano
 CMD ["apache2-foreground"]
