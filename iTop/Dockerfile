@@ -31,7 +31,7 @@ RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf/pro
 RUN echo "\$MySettings['cache_dir'] = '/tmp/itop-cache';" >> /var/www/html/conf/production/config-itop.php \
     && echo "\$MySettings['log_dir'] = '/tmp/itop-log';" >> /var/www/html/conf/production/config-itop.php \
     && echo "\$MySettings['data_dir'] = '/tmp/itop-data';" >> /var/www/html/conf/production/config-itop.php \
-    && chmod 777 /var/www/html/conf/production/config-itop.php
+    && chmod 644 /var/www/html/conf/production/config-itop.php  # Cambiar permisos a solo lectura
 
 # Comando para iniciar Apache en primer plano
 CMD ["apache2-foreground"]
