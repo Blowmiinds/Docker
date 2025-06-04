@@ -24,7 +24,7 @@ RUN curl -L -o itop.zip https://sourceforge.net/projects/itop/files/itop/3.2.1-1
     && rm -rf itop.zip itop
 
 # Crear directorios para caché, logs y otros archivos fuera de /var/www/html
-RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf /var/www/html/env-production \
+RUN mkdir -p /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html/conf/production /var/www/html/env-production \
     && chown -R www-data:www-data /tmp/itop-cache /tmp/itop-log /tmp/itop-data /var/www/html
 
 # Modificar la configuración de iTop para usar directorios en /tmp
